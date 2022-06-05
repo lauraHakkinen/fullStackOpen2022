@@ -9,11 +9,18 @@ const Statistics = (props) => {
   const neutral = props.list[1]
   const bad = props.list[2]
 
+  if (good === 0 && neutral === 0 && bad === 0) {
+    return (
+      <div>
+        <h1>statistics</h1>
+        <p>No feedback given</p>
+      </div>
+    )
+  }
+
   const all = good + neutral + bad
   let avg = ((good * 1) + (neutral * 0) + (bad * -1)) / all
-  if (Number.isNaN(avg)) avg = 0 // saa arvon 0 eikä NaN
   let pos = 100 * (good / all)
-  if (Number.isNaN(pos)) pos = 0 // saa arvon 0 eikä NaN 
 
   return (
     <div>

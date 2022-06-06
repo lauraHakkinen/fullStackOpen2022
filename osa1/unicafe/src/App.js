@@ -2,30 +2,39 @@ import { useState } from 'react'
 
 const Button = (props) => <button onClick={props.handleClick}>{props.text}</button>
 
-const StatisticLine = (props) => <div>{props.text} {props.value}</div>
+const StatisticLine = (props) => (
+    <tr>
+      <td>{props.text} </td>
+      <td>{props.value}</td>
+    </tr>
+  )
 
 const Statistics = (props) => {
   const good = props.list[0]
   const neutral = props.list[1]
   const bad = props.list[2]
 
-  if (good === 0 && neutral === 0 && bad === 0) {
-    return <div><p>No feedback given</p></div>
-  }
-
   const all = good + neutral + bad
-  let avg = ((good * 1) + (neutral * 0) + (bad * -1)) / all
-  let pos = 100 * (good / all)
+  let avg = (good - bad) / all
+  let pos = (100 * good) / all
+  
+  // tarkistetaan, onko palautetta annettu
+  if (all === 0) return <div><p>No feedback given</p></div>
 
   return (
-    <div>
-      <StatisticLine text="good" value={good} />
-      <StatisticLine text="neutral" value={neutral} />
-      <StatisticLine text="bad" value={bad} />
-      <StatisticLine text="all" value={all} />
-      <StatisticLine text="average" value={avg} />
-      <div>positive {pos} %</div>
-    </div>
+    <table>
+      <tbody>
+        <StatisticLine text="good" value={good} />
+        <StatisticLine text="neutral" value={neutral} />
+        <StatisticLine text="bad" value={bad} />
+        <StatisticLine text="all" value={all} />
+        <StatisticLine text="average" value={avg} />
+        <tr>
+          <td>positive</td>
+          <td>{pos} %</td>
+        </tr>
+      </tbody>
+    </table>
   )
 }
 

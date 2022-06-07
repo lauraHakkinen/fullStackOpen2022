@@ -39,15 +39,6 @@ const App = () => {
 
   const maxVotesIndex = votes.indexOf(Math.max(...votes))
 
-  /*const mostVotedAnecdote = {
-    // jos ei ole eniten äänestettyä anekdoottia
-    if (maxVotesIndex === -1) {
-      'No anecdotes have been voted'
-    } else {
-      anecdotes[maxVotesIndex]
-    }
-  }*/
-
   return (
     <div>
       <Header text="Anecdote of the day" />

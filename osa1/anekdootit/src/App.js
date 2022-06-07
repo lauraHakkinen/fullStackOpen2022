@@ -1,10 +1,16 @@
 import { useState } from 'react'
 
+const Header = (props) => ( <h1> {props.text} </h1> ) 
+
 const Button = (props) => (
   <button onClick={props.handleClick}>
     {props.text}
   </button>
 )
+
+const Votes = (props) => ( <p> has {props.votes} votes </p> )
+
+const Anecdote = (props) => ( <p> {props.anecdote} </p> )
 
 const App = () => {
   const anecdotes = [
@@ -31,12 +37,27 @@ const App = () => {
     setVotes(copy)
   }
 
+  const maxVotesIndex = votes.indexOf(Math.max(...votes))
+
+  /*const mostVotedAnecdote = {
+    // jos ei ole eniten äänestettyä anekdoottia
+    if (maxVotesIndex === -1) {
+      'No anecdotes have been voted'
+    } else {
+      anecdotes[maxVotesIndex]
+    }
+  }*/
+
   return (
     <div>
-      {anecdotes[selected]}
-      <div>has {votes[selected]} votes</div> 
-      <Button handleClick={handleClickNext} text="next anecdote" />
+      <Header text="Anecdote of the day" />
+      <Anecdote anecdote={anecdotes[selected]} />
+      <Votes votes={votes[selected]} /> 
       <Button handleClick={handleClickVote} text="vote" />
+      <Button handleClick={handleClickNext} text="next anecdote" />
+      <Header text="Anecdote with most votes" />
+      <Anecdote anecdote={anecdotes[maxVotesIndex]} />
+      <Votes votes={votes[maxVotesIndex]} />
     </div>
   )
 }

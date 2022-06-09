@@ -1,0 +1,1 @@
+Tämä repositorio sisältää osa1:n harjoitustehtävät. 

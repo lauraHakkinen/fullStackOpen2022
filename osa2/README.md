@@ -1,1 +1,1 @@
-Tämä repositorio sisältää osa1:n harjoitustehtävät. 
+Tämä repositorio sisältää osa2:n harjoitustehtävät. 

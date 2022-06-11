@@ -15,7 +15,7 @@ const App = () => {
 
     const existing = persons.find(p => p.name === newName)
     if (existing !== undefined) {
-      alert(newName + ' is already added to phonebook')
+      alert(`${newName} is already added to phonebook`)
       setNewName('')
     } else {
       setPersons(persons.concat(nameObject))

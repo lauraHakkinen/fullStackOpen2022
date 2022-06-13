@@ -1,12 +1,18 @@
 import { useState } from 'react'
-import Person from './components/Person'
+import Persons from './components/Person'
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' , number: '040-1231244'}
-  ]) 
+    { name: 'Arto Hellas', number: '040-123456' },
+    { name: 'Ada Lovelace', number: '39-44-5323523' },
+    { name: 'Dan Abramov', number: '12-43-234345' },
+    { name: 'Mary Poppendieck', number: '39-23-6423122' }
+  ])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [newFilter, setNewFilter] = useState('')
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -16,7 +22,9 @@ const App = () => {
       number: newNumber,
     }
 
-    const existing = persons.find(p => p.name === newName)
+    // ei voi lisätä pienellä kirjoitettunakaan (esim. nimeä arto hellas ei hyväksytä, 
+    // sillä nimi on jo olemassa muodossa Arto Hellas)
+    const existing = persons.find(p => p.name.toLowerCase() === newName.toLowerCase())
     if (existing !== undefined) {
       alert(`${newName} is already added to phonebook`)
       setNewName('')
@@ -29,38 +37,51 @@ const App = () => {
     
   }
 
-  const handleNewName = (event) => {
-    setNewName(event.target.value)
+  const handleFilter = (event) => {
+    event.preventDefault()
+
+    // apufunktio rajausta varten
+    const filtered = (name, num) => {
+      // case-insensitiivinen
+      const filteredName = name.toLowerCase().includes(newFilter.toLowerCase())
+      const filteredNumber = num.toLowerCase().includes(newFilter.toLowerCase())
+
+      return (filteredName || filteredNumber)
+    }
+
+    setPersons(persons.filter(p => filtered(p.name, p.number)))
+    setNewFilter('')
   }
 
-  const handleNewNumber = (event) => {
-    setNewNumber(event.target.value)
-  }
+  const handleNewName = (event) => setNewName(event.target.value)
+
+  const handleNewNumber = (event) => setNewNumber(event.target.value)
+
+  const handleNewFilter = (event) => setNewFilter(event.target.value)
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input 
-            value={newName}
-            onChange={handleNewName}
-          />
-        </div>
-        <div>
-          number: <input
-            value={newNumber}
-            onChange={handleNewNumber}
-          />
-        </div>
-        <div><button type="submit">add</button></div>
-      </form>
-      <h2>Numbers</h2>
-      <div>
-        {persons.map(person =>
-          <Person key={person.name} person={person} />
-        )}
-      </div>
+      
+      <Filter 
+        handleFilter={handleFilter} 
+        newFilter={newFilter} 
+        handleNewFilter={handleNewFilter} 
+      />
+
+      <h3>Add a new</h3>
+
+      <PersonForm 
+        addPerson={addPerson} 
+        newName={newName} 
+        handleNewName={handleNewName} 
+        newNumber={newNumber} 
+        handleNewNumber={handleNewNumber} 
+      />
+      
+      <h3>Numbers</h3>
+
+      <Persons persons={persons} />
     </div>
   )
 

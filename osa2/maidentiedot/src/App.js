@@ -17,7 +17,7 @@ const App = () => {
   return (
     <div>
       <Filter filter={filter} handleFilter={(event) => setFilter(event.target.value)} />
-      <SearchResults countries={countries} filter={filter} />
+      <SearchResults countries={countries} filter={filter} setFilter={setFilter} />
     </div>
   );
 }

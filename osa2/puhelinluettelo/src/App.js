@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react'
+import './index.css'
+import personService from './services/persons'
 import Persons from './components/Person'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
-import personService from './services/persons'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [notification, setNotification] = useState('')
 
   useEffect(() => {
     personService
@@ -17,6 +20,11 @@ const App = () => {
         setPersons(initialPersons)
       })
   }, [])
+
+  function handleMessage(message) {
+    setNotification(message)
+    setTimeout(() => setNotification(null), 5000)
+  }
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -40,6 +48,7 @@ const App = () => {
             setPersons(persons.map(p => p.id !== existing.id ? p : returnedPerson))
             setNewName('')
             setNewNumber('')
+            handleMessage(`The phonenumber of ${existing.name} was changed`)
           })
         break
       default:
@@ -49,6 +58,7 @@ const App = () => {
             setPersons(persons.concat(returnedPerson))
             setNewName('')
             setNewNumber('')
+            handleMessage(`Added ${newName}`)
           })
     }
   }
@@ -75,6 +85,7 @@ const App = () => {
     if (window.confirm(`Delete ${person.name} ?`)) {
       personService.remove(id)
       setPersons(persons.filter(p => p.id !== id))
+      handleMessage(`Deleted ${person.name}`)
     }
     
   }
@@ -88,6 +99,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+
+      <Notification message={notification} />
       
       <Filter 
         handleFilter={handleFilter} 

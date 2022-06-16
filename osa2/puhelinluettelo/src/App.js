@@ -32,9 +32,15 @@ const App = () => {
 
     switch (true) {
       case existing !== undefined:
-        alert(`${newName} is already added to phonebook`)
-        setNewName('')
-        setNewNumber('')
+        alert(`${newName} is already added to phonebook, replace the old number with a new one?`)
+        const updatedPerson = { ...existing, number: newNumber}
+        personService
+          .update(existing.id, updatedPerson)
+          .then(returnedPerson => {
+            setPersons(persons.map(p => p.id !== existing.id ? p : returnedPerson))
+            setNewName('')
+            setNewNumber('')
+          })
         break
       default:
         personService

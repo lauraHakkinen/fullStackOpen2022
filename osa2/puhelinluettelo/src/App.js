@@ -11,7 +11,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
-  const [notification, setNotification] = useState('')
+  const [notification, setNotification] = useState({ message: null })
 
   useEffect(() => {
     personService
@@ -21,9 +21,9 @@ const App = () => {
       })
   }, [])
 
-  function handleMessage(message) {
-    setNotification(message)
-    setTimeout(() => setNotification(null), 5000)
+  const handleMessage = (message, type='success') => {
+    setNotification({message, type})
+    setTimeout(() => setNotification({ message: null }), 5000)
   }
 
   const addPerson = (event) => {
@@ -60,15 +60,18 @@ const App = () => {
             setNewNumber('')
             handleMessage(`Added ${newName}`)
           })
+          .catch(error => {
+            console.log(error.response.data)
+            handleMessage(JSON.stringify(error.response.data), 'error')
+          })
     }
   }
 
   const handleFilter = (event) => {
     event.preventDefault()
 
-    // apufunktio rajausta varten
+    // apufunktio rajausta varten, joka on case-insensitiivinen
     const filtered = (name, num) => {
-      // case-insensitiivinen
       const filteredName = name.toLowerCase().includes(newFilter.toLowerCase())
       const filteredNumber = num.toLowerCase().includes(newFilter.toLowerCase())
 
@@ -100,7 +103,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
 
-      <Notification message={notification} />
+      <Notification notification={notification} />
       
       <Filter 
         handleFilter={handleFilter} 

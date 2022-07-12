@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import './index.css'
 import personService from './services/persons'
-import Persons from './components/Person'
+import Persons from './components/Persons'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Notification from './components/Notification'
@@ -10,7 +10,7 @@ const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
-  const [newFilter, setNewFilter] = useState('')
+  const [filter, setFilter] = useState('')
   const [notification, setNotification] = useState({ message: null })
 
   useEffect(() => {
@@ -50,6 +50,10 @@ const App = () => {
             setNewNumber('')
             handleMessage(`The phonenumber of ${existing.name} was changed`)
           })
+          .catch(error => {
+            console.log(error.response.data)
+            handleMessage(JSON.stringify(error.response.data), 'error')
+          })
         break
       default:
         personService
@@ -67,21 +71,6 @@ const App = () => {
     }
   }
 
-  const handleFilter = (event) => {
-    event.preventDefault()
-
-    // apufunktio rajausta varten, joka on case-insensitiivinen
-    const filtered = (name, num) => {
-      const filteredName = name.toLowerCase().includes(newFilter.toLowerCase())
-      const filteredNumber = num.toLowerCase().includes(newFilter.toLowerCase())
-
-      return (filteredName || filteredNumber)
-    }
-
-    setPersons(persons.filter(p => filtered(p.name, p.number)))
-    setNewFilter('')
-  }
-
   const remove = (id) => {
     const person = persons.find(p => p.id === id)
 
@@ -97,7 +86,16 @@ const App = () => {
 
   const handleNewNumber = (event) => setNewNumber(event.target.value)
 
-  const handleNewFilter = (event) => setNewFilter(event.target.value)
+  const handleFilter = (event) => setFilter(event.target.value)
+
+  const filterNameAndNum = (name, num) => {
+    const filteredName = name.toLowerCase().includes(filter.toLowerCase())
+    const filteredNumber = num.toLowerCase().includes(filter.toLowerCase())
+
+    return (filteredName || filteredNumber)
+  }
+
+  const showFiltered = persons.filter(p => filterNameAndNum(p.name, p.number))
 
   return (
     <div>
@@ -107,8 +105,7 @@ const App = () => {
       
       <Filter 
         handleFilter={handleFilter} 
-        newFilter={newFilter} 
-        handleNewFilter={handleNewFilter} 
+        filter={filter} 
       />
 
       <h3>Add a new</h3>
@@ -123,7 +120,7 @@ const App = () => {
       
       <h3>Numbers</h3>
 
-      <Persons persons={persons} onDelete={remove} />
+      <Persons persons={showFiltered} onDelete={remove} />
     </div>
   )
 

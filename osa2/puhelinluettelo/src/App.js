@@ -40,20 +40,26 @@ const App = () => {
 
     switch (true) {
       case existing !== undefined:
-        alert(`${newName} is already added to phonebook, replace the old number with a new one?`)
+        const ok = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)
         const updatedPerson = { ...existing, number: newNumber}
-        personService
-          .update(existing.id, updatedPerson)
-          .then(returnedPerson => {
-            setPersons(persons.map(p => p.id !== existing.id ? p : returnedPerson))
-            setNewName('')
-            setNewNumber('')
-            handleMessage(`The phonenumber of ${existing.name} was changed`)
-          })
-          .catch(error => {
-            console.log(error.response.data)
-            handleMessage(JSON.stringify(error.response.data), 'error')
-          })
+        if (ok) {  
+          personService
+            .update(existing.id, updatedPerson)
+            .then(returnedPerson => {
+              setPersons(persons.map(p => p.id !== existing.id ? p : returnedPerson))
+              setNewName('')
+              setNewNumber('')
+              handleMessage(`The phonenumber of ${existing.name} was changed`)
+            })
+            .catch(error => {
+              /*
+              setPersons(persons.filter(p => p.name !== newName))
+              handleMessage(`The information of ${newName} was already removed`, 'error')
+              */
+              console.log(error.response.data)
+              handleMessage(JSON.stringify(error.response.data), 'error')
+            })
+          }
         break
       default:
         personService
@@ -95,7 +101,9 @@ const App = () => {
     return (filteredName || filteredNumber)
   }
 
-  const showFiltered = persons.filter(p => filterNameAndNum(p.name, p.number))
+  const showFiltered = filter.length === 0
+    ? persons
+    : persons.filter(p => filterNameAndNum(p.name, p.number))
 
   return (
     <div>

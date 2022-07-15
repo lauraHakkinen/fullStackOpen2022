@@ -57,7 +57,7 @@ const App = () => {
               handleMessage(`The information of ${newName} was already removed`, 'error')
               */
               console.log(error.response.data)
-              handleMessage(JSON.stringify(error.response.data), 'error')
+              handleMessage(error.response.data.error, 'error')
             })
           }
         break
@@ -72,7 +72,7 @@ const App = () => {
           })
           .catch(error => {
             console.log(error.response.data)
-            handleMessage(JSON.stringify(error.response.data), 'error')
+            handleMessage(error.response.data.error, 'error')
           })
     }
   }

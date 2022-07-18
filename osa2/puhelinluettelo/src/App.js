@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import './index.css'
 import personService from './services/persons'
 import Persons from './components/Persons'
 import Filter from './components/Filter'
@@ -52,12 +51,13 @@ const App = () => {
               handleMessage(`The phonenumber of ${existing.name} was changed`)
             })
             .catch(error => {
-              /*
-              setPersons(persons.filter(p => p.name !== newName))
-              handleMessage(`The information of ${newName} was already removed`, 'error')
-              */
-              console.log(error.response.data)
-              handleMessage(error.response.data.error, 'error')
+              if (error.message === 'Request failed with status code 404') {
+                setPersons(persons.filter(p => p.name !== newName))
+                handleMessage(`The information of ${newName} has already been removed`, 'error')
+              } else {
+                console.log(error.response.data)
+                handleMessage(error.response.data.error, 'error')
+              }
             })
           }
         break

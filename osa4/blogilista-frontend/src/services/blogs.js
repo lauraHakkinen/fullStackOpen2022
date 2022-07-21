@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = 'http://localhost:3003/api/blogs'
+const baseUrl = '/api/blogs'
 
 const getAll = () => {
   const request = axios.get(baseUrl)
@@ -11,8 +11,8 @@ const create = (newObject) => {
   return request.then(response => response.data)
 }
 
-const update = (newObject) => {
-  const request = axios.put(`${baseUrl}/${newObject.id}`, newObject)
+const update = (id, newObject) => {
+  const request = axios.put(`${baseUrl}/${id}`, newObject)
   return request.then(response => response.data)
 }
 

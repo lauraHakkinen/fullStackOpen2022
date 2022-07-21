@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import BlogForm from './components/BlogForm'
 import Blogs from './components/Blogs'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
+import './index.css'
 
 const App = () => {
   
@@ -9,6 +11,7 @@ const App = () => {
   const [author, setAuthor] = useState('')
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
+  const [notification, setNotification] = useState({message: null})
 
   useEffect(() => {
     blogService
@@ -17,6 +20,11 @@ const App = () => {
         setBlogs(initialBlogs)
       })
   }, [])
+
+  const handleMessage = (message, type='success') => {
+    setNotification({ message, type })
+    setTimeout(() => setNotification({ message: null }), 5000)
+  }
 
   const addBlog = (event) => {
     event.preventDefault()
@@ -28,6 +36,16 @@ const App = () => {
       likes: 0
     }
 
+    if (!author || !title || !url) {
+      handleMessage('No author, title and/or url specified', 'error')
+      return
+    }
+
+    if (blogs.find(b => (b.author === author && b.title === title && b.url === url))) {
+      handleMessage('This blog has already been added to the list', 'error')
+      return
+    }
+
     blogService
       .create(blogObject)
       .then(returnedBlog => {
@@ -35,25 +53,24 @@ const App = () => {
         setAuthor('')
         setTitle('')
         setUrl('')
+        handleMessage(`Blog ${returnedBlog.title} was added to the list`)
+      })
+      .catch(error => {
+        handleMessage(error.response.data.error, 'error')
       })
   }
 
-  const updateLikes = (id) => {
-    const blog = blogs.find(b => b.id === id)
-    const updatedBlog = {...blog, likes: blog.likes + 1}
-
-    console.log(updatedBlog)
-    console.log(id)
+  const updateLikes = (blog) => {
+    const findBlog = blogs.find(b => b.id === blog.id)
+    const updatedBlog = {...findBlog, likes: findBlog.likes + 1}
 
     blogService
-      .update(id, updatedBlog)
+      .update(updatedBlog.id, updatedBlog)
       .then(returnedBlog => {
-        console.log('blog likes will be updated')
-        setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
-        console.log('blog likes updated')
+        setBlogs(blogs.map(b => b.id !== updatedBlog.id ? b : returnedBlog))
       })
       .catch(error => {
-        console.log('error while trying to update blog')
+        handleMessage('An error occured while trying to like a blog', 'error')
       })
   }
 
@@ -66,6 +83,8 @@ const App = () => {
   return (
     <div>
       <h2>Bloglist</h2>
+
+      <Notification notification={notification} />
       
       <h3>Add a blog</h3>
 

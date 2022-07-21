@@ -6,6 +6,7 @@ const Blog = require('./models/blog')
 
 app.use(express.json())
 app.use(cors())
+app.use(express.static('build'))
 
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
@@ -53,7 +54,7 @@ app.post('/api/blogs', (request, response, next) => {
     .catch(error => next(error))
 })
 
-app.put('/api/persons/:id', (request, response, next) => {
+app.put('/api/blogs/:id', (request, response, next) => {
   const body = request.body
 
   const blog = {
@@ -62,8 +63,6 @@ app.put('/api/persons/:id', (request, response, next) => {
     url: body.url,
     likes: body.likes,
   }
-
-  //console.log(blog)
 
   Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
     .then(updatedBlog => {
@@ -84,6 +83,8 @@ const errorHandler = (error, request, response, next) => {
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
   }
 
   next(error)

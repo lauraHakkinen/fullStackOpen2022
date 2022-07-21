@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:ui": "rmdir /s build && mkdir build && cd ../blogilista-frontend && npm run build && Xcopy /E C:\\Users\\laura\\Documents\\AALTO\\fullStack\\fullStackOpen2022\\osa4\\blogilista-frontend\\build C:\\Users\\laura\\Documents\\AALTO\\fullStack\\fullStackOpen2022\\osa4\\blogilista-backend\\build"
   },
   "author": "Laura Häkkinen",
   "license": "ISC",

@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build:ui": "rmdir /s build && mkdir build && cd ../blogilista-frontend && npm run build && Xcopy /E C:\\Users\\laura\\Documents\\AALTO\\fullStack\\fullStackOpen2022\\osa4\\blogilista-frontend\\build C:\\Users\\laura\\Documents\\AALTO\\fullStack\\fullStackOpen2022\\osa4\\blogilista-backend\\build"
+    "build:ui": "rmdir /s build && mkdir build && cd ../blogilista-frontend && npm run build && Xcopy /E C:\\Users\\laura\\Documents\\AALTO\\fullStack\\fullStackOpen2022\\osa4\\blogilista-frontend\\build C:\\Users\\laura\\Documents\\AALTO\\fullStack\\fullStackOpen2022\\osa4\\blogilista-backend\\build",
+    "lint": "eslint .",
+    "test": "jest --verbose"
   },
   "author": "Laura Häkkinen",
   "license": "ISC",
@@ -18,6 +19,11 @@
     "mongoose": "^6.4.4"
   },
   "devDependencies": {
+    "eslint": "^8.20.0",
+    "jest": "^28.1.3",
     "nodemon": "^2.0.19"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }

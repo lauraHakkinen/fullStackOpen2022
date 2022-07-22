@@ -25,7 +25,7 @@ blogsRouter.get('/:id', (request, response, next) => {
 blogsRouter.post('/', (request, response, next) => {
   const blog = new Blog(request.body)
 
-  if (!body.title || !body.author || !body.url) {
+  if (!blog.title || !blog.author || !blog.url) {
     return response.status(400).json({
       error: 'Title, author and/or url missing'
     })
@@ -43,8 +43,8 @@ blogsRouter.put('/:id', (request, response, next) => {
   const { title, author, url, likes } = request.body
 
   Blog.findByIdAndUpdate(
-    request.params.id, 
-    { title, author, url, likes }, 
+    request.params.id,
+    { title, author, url, likes },
     { new: true }
   )
     .then(updatedBlog => {

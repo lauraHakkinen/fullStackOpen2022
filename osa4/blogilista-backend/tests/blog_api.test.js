@@ -52,6 +52,36 @@ test('a valid specific note can be added', async () => {
   )
 })
 
+test('the default value of likes is zero', async () => {
+  const newBlog = {
+    title: 'TDD harms architecture',
+    author: 'Robert C. Martin',
+    url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  expect(blogsAtEnd[blogsAtEnd.length - 1].likes).toBe(0)
+})
+
+test('a blog can only be added if it contains a title and an url', async () => {
+  const newBlog = {
+    title: '',
+    author: '',
+    url: '',
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })

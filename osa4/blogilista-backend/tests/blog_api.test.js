@@ -82,6 +82,22 @@ test('a blog can only be added if it contains a title and an url', async () => {
     .expect(400)
 })
 
+test('a blog can be removed with statuscode 204', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+  const blogToDelete = blogsAtStart[0]
+
+  await api
+    .delete(`/api/blogs/${blogToDelete.id}`)
+    .expect(204)
+
+  const blogsAtTheEnd = await helper.blogsInDb()
+
+  expect(blogsAtTheEnd).toHaveLength(helper.initialBlogs.length - 1)
+
+  const titles = blogsAtTheEnd.map(b => b.title)
+  expect(titles).not.toContainEqual(blogToDelete.title)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })

@@ -74,6 +74,17 @@ const App = () => {
       })
   }
 
+  const handleRemove = (id) => {
+    const blog = blogs.find(b => b.id === id)
+    console.log(blog.title)
+
+    if (window.confirm(`Delete blog called ${blog.title} ?`)) {
+      blogService.remove(id)
+      setBlogs(blogs.filter(b => b.id !== id))
+      handleMessage(`Deleted a blog called ${blog.title}`)
+    }
+  }
+
   const handleAuthor = (event) => setAuthor(event.target.value)
 
   const handleTitle = (event) => setTitle(event.target.value)
@@ -100,7 +111,7 @@ const App = () => {
 
       <h3>Blogs</h3>
 
-      <Blogs blogs={blogs} handleLikes={updateLikes} />
+      <Blogs blogs={blogs} handleLikes={updateLikes} handleRemove={handleRemove} />
     </div>
   )
 }

@@ -23,6 +23,11 @@ test('all blogs are returned', async () => {
   expect(response.body).toHaveLength(helper.initialBlogs.length)
 })
 
+test('blogs can be identified by id', async () => {
+  const blogs = await helper.blogsInDb()
+  blogs.forEach(b => expect(b.id).toBeDefined())
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })

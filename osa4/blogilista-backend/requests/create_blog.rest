@@ -1,9 +1,9 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imhha2tpbmwiLCJpZCI6IjYyZGQyZWM3ZTgzMTdhMGY4NmI5ZGU4YiIsImlhdCI6MTY1ODc1MDI5N30.t75rZzrvoy1M_vyWHhJdxqRy3WKewisJJZF-Ywi2u4Y
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imhha2tpbmwiLCJpZCI6IjYyZGQyZWM3ZTgzMTdhMGY4NmI5ZGU4YiIsImlhdCI6MTY1ODc1MzUwNX0.MkbVOTU3mE2y3P6qgmIEUDDwX9WZ5CT46f8MFB-pUM4
 
 {
   "author": "Testi124912487",
   "title": "testiblogi",
-  "url": "http://testi.com",
+  "url": "http://testi.com"
 }

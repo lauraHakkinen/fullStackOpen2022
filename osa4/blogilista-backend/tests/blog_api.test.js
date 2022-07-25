@@ -35,13 +35,13 @@ describe('when there is initially some blogs saved', () => {
 
 describe('addition of a new blog', () => {
 
-  test('a valid specific note can be added', async () => {
+  test('a valid specific blog can be added', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+
     const newBlog = {
       title: 'First class tests',
-      id: '62dc429e3797295450e5b96a',
       author: 'Robert C. Martin',
       url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll',
-      likes: 10,
     }
 
     await api
@@ -51,7 +51,7 @@ describe('addition of a new blog', () => {
       .expect('Content-Type', /application\/json/)
 
     const blogsAtEnd = await helper.blogsInDb()
-    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length + 1)
 
     const titles = blogsAtEnd.map(b => b.title)
     expect(titles).toContainEqual(
@@ -181,6 +181,29 @@ describe('when there is initially one user at db', () => {
       .expect('Content-Type', /application\/json/)
 
     expect(result.body.error).toContain('username must be unique')
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
+  })
+
+  test('creation fails with proper statuscode and message if username is less than 3 chars', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'li',
+      name: 'Li Yan',
+      password: 'salasana123',
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    expect(result.body.error).toContain(
+      'User validation failed: username: Path `username` (`li`) is shorter than the minimum allowed length (3).'
+    )
 
     const usersAtEnd = await helper.usersInDb()
     expect(usersAtEnd).toHaveLength(usersAtStart.length)

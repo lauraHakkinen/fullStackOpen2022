@@ -129,50 +129,6 @@ describe('a blogs information can be updated', () => {
 
 describe('deletion of a blog', () => {
 
-  /*
-  let token = null
-  beforeEach(async () => {
-    await Blog.deleteMany({})
-    await User.deleteMany({})
-
-    console.log('ennen testejä blogin ja käyttäjät poistettu')
-
-    const passWordHash = await bcrypt.hash('salasana123', 10)
-    const user = new User({ username: 'hakkinl', passWordHash })
-
-    console.log('käyttäjä', user)
-
-    await user.save()
-
-    console.log('käyttäjä tallennettu')
-
-    await api
-      .post('/api/login')
-      .send({ username: 'hakkinl', password: 'salasana123' })
-      .then((res) => {
-        return (token = res.body.token)
-      })
-
-    console.log('käyttäjä kirjautunut')
-
-    console.log(token)
-
-    const newBlog = {
-      title: 'Kivoi kissoi',
-      author: 'Laura Häkkinen',
-      url: 'http://kivoikissoi.org'
-    }
-
-    await api
-      .post('/api/blogs')
-      .set('Authorization', `bearer ${token}`)
-      .send(newBlog)
-      .expect(200)
-      .expect('Content-Type', /application\/json/)
-
-    return token
-  })*/
-
   test('a blog can be removed with statuscode 204', async () => {
 
     const blogsAtStart = await blogHelper.blogsInDb()

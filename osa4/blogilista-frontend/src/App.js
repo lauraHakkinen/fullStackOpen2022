@@ -79,9 +79,16 @@ const App = () => {
     console.log(blog.title)
 
     if (window.confirm(`Delete blog called ${blog.title} ?`)) {
-      blogService.remove(id)
-      setBlogs(blogs.filter(b => b.id !== id))
-      handleMessage(`Deleted a blog called ${blog.title}`)
+      blogService
+        .remove(id)
+        .then(res => {
+          setBlogs(blogs.filter(b => b.id !== id))
+          handleMessage(`Deleted a blog called ${blog.title}`)
+        })
+        .catch(error => {
+          handleMessage('An error occured while trying to delete blog', 'error')
+        })
+      
     }
   }
 

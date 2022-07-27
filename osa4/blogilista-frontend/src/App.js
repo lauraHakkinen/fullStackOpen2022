@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react'
 import BlogForm from './components/BlogForm'
 import Blogs from './components/Blogs'
 import Notification from './components/Notification'
+import LoginForm from './components/LoginForm'
 import blogService from './services/blogs'
+import loginService from './services/login'
 import './index.css'
 
 const App = () => {
@@ -12,6 +14,9 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
   const [notification, setNotification] = useState({message: null})
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [user, setUser] = useState(null)
 
   useEffect(() => {
     blogService
@@ -19,6 +24,15 @@ const App = () => {
       .then(initialBlogs => {
         setBlogs(initialBlogs)
       })
+  }, [])
+
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      blogService.setToken(user.token)
+    }
   }, [])
 
   const handleMessage = (message, type='success') => {
@@ -92,6 +106,32 @@ const App = () => {
     }
   }
 
+  const handleLogin = async (event) => {
+    event.preventDefault()
+    try {
+      const user = await loginService.login({
+        username, password
+      })
+
+      window.localStorage.setItem(
+        'loggedNoteappUser', JSON.stringify(user)
+      ) 
+
+      blogService.setToken(user.token)
+      setUser(user)
+      setUsername('')
+      setPassword('')
+    } catch (exception) {
+      handleMessage('Wrong username or password', 'error')
+    }
+  }
+
+  const handleLogOut = (event) => {
+    event.preventDefault()
+    window.localStorage.clear()
+    window.location.reload(false)
+  }
+
   const handleAuthor = (event) => setAuthor(event.target.value)
 
   const handleTitle = (event) => setTitle(event.target.value)
@@ -103,18 +143,30 @@ const App = () => {
       <h2>Bloglist</h2>
 
       <Notification notification={notification} />
-      
-      <h3>Add a blog</h3>
 
-      <BlogForm 
-        addBlog={addBlog}
-        author={author}
-        handleAuthor={handleAuthor}
-        title={title}
-        handleTitle={handleTitle}
-        url={url}
-        handleUrl={handleUrl}
-      />
+      {user === null
+        ? <LoginForm 
+            username={username}
+            setUsername={setUsername}
+            password={password}
+            setPassword={setPassword}
+            handleLogin={handleLogin}
+          />
+        : <div> 
+            <button className="logout-button" type="button" onClick={handleLogOut}>Log out</button>
+            <h3>Add a blog</h3>
+
+            <BlogForm 
+              addBlog={addBlog}
+              author={author}
+              handleAuthor={handleAuthor}
+              title={title}
+              handleTitle={handleTitle}
+              url={url}
+              handleUrl={handleUrl}
+            />
+          </div>
+      }
 
       <h3>Blogs</h3>
 

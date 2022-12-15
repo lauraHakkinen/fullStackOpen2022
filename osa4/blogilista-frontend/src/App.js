@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import BlogForm from './components/BlogForm'
 import Blogs from './components/Blogs'
 import Notification from './components/Notification'
@@ -6,6 +6,7 @@ import LoginForm from './components/LoginForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import './index.css'
+import Togglable from './components/Togglable'
 
 const App = () => {
   
@@ -60,6 +61,7 @@ const App = () => {
       return
     }
 
+    blogFormRef.current.toggleVisibility()
     blogService
       .create(blogObject)
       .then(returnedBlog => {
@@ -138,33 +140,38 @@ const App = () => {
 
   const handleUrl = (event) => setUrl(event.target.value)
 
+  const blogFormRef = useRef()
+
   return (
     <div>
-      <h2>Bloglist</h2>
+      <h1>Bloglist</h1>
 
       <Notification notification={notification} />
 
       {user === null
-        ? <LoginForm 
-            username={username}
-            setUsername={setUsername}
-            password={password}
-            setPassword={setPassword}
-            handleLogin={handleLogin}
-          />
-        : <div> 
-            <button className="logout-button" type="button" onClick={handleLogOut}>Log out</button>
-            <h3>Add a blog</h3>
-
-            <BlogForm 
-              addBlog={addBlog}
-              author={author}
-              handleAuthor={handleAuthor}
-              title={title}
-              handleTitle={handleTitle}
-              url={url}
-              handleUrl={handleUrl}
+        ? <Togglable buttonLabel='login'>
+            <LoginForm 
+              username={username}
+              setUsername={setUsername}
+              password={password}
+              setPassword={setPassword}
+              handleLogin={handleLogin}
             />
+          </Togglable>
+        : <div> 
+            <p>{user.name} logged in</p>
+            <button className="remove-button" type="button" onClick={handleLogOut}>Log out</button>
+            <Togglable buttonLabel='add a new blog' ref={blogFormRef}>
+              <BlogForm 
+                addBlog={addBlog}
+                author={author}
+                handleAuthor={handleAuthor}
+                title={title}
+                handleTitle={handleTitle}
+                url={url}
+                handleUrl={handleUrl}
+              />
+            </Togglable>
           </div>
       }
 

@@ -11,9 +11,6 @@ import Togglable from './components/Togglable'
 const App = () => {
   
   const [blogs, setBlogs] = useState([])
-  const [author, setAuthor] = useState('')
-  const [title, setTitle] = useState('')
-  const [url, setUrl] = useState('')
   const [notification, setNotification] = useState({message: null})
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -41,34 +38,25 @@ const App = () => {
     setTimeout(() => setNotification({ message: null }), 5000)
   }
 
-  const addBlog = (event) => {
-    event.preventDefault()
+  const addBlog = (blogObject) => {
 
-    const blogObject = {
-      author: author,
-      title: title,
-      url: url,
-      likes: 0
-    }
-
-    if (!author || !title || !url) {
+    if (!blogObject.author || !blogObject.title || !blogObject.url) {
       handleMessage('No author, title and/or url specified', 'error')
       return
     }
 
-    if (blogs.find(b => (b.author === author && b.title === title && b.url === url))) {
+    if (blogs.find(b => (b.author === blogObject.author && b.title === blogObject.title && b.url === blogObject.url))) {
       handleMessage('This blog has already been added to the list', 'error')
       return
     }
+
+    blogObject.user = username
 
     blogFormRef.current.toggleVisibility()
     blogService
       .create(blogObject)
       .then(returnedBlog => {
         setBlogs(blogs.concat(returnedBlog))
-        setAuthor('')
-        setTitle('')
-        setUrl('')
         handleMessage(`Blog ${returnedBlog.title} was added to the list`)
       })
       .catch(error => {
@@ -134,12 +122,6 @@ const App = () => {
     window.location.reload(false)
   }
 
-  const handleAuthor = (event) => setAuthor(event.target.value)
-
-  const handleTitle = (event) => setTitle(event.target.value)
-
-  const handleUrl = (event) => setUrl(event.target.value)
-
   const blogFormRef = useRef()
 
   return (
@@ -162,22 +144,14 @@ const App = () => {
             <p>{user.name} logged in</p>
             <button className="remove-button" type="button" onClick={handleLogOut}>Log out</button>
             <Togglable buttonLabel='add a new blog' ref={blogFormRef}>
-              <BlogForm 
-                addBlog={addBlog}
-                author={author}
-                handleAuthor={handleAuthor}
-                title={title}
-                handleTitle={handleTitle}
-                url={url}
-                handleUrl={handleUrl}
-              />
+              <BlogForm createBlog={addBlog} />
             </Togglable>
           </div>
       }
 
       <h3>Blogs</h3>
 
-      <Blogs blogs={blogs} handleLikes={updateLikes} handleRemove={handleRemove} />
+      <Blogs blogs={blogs} handleLikes={updateLikes} handleRemove={handleRemove} user={user} />
     </div>
   )
 }

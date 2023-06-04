@@ -9,9 +9,9 @@ import './index.css'
 import Togglable from './components/Togglable'
 
 const App = () => {
-  
+
   const [blogs, setBlogs] = useState([])
-  const [notification, setNotification] = useState({message: null})
+  const [notification, setNotification] = useState({ message: null })
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -66,14 +66,14 @@ const App = () => {
 
   const updateLikes = (blog) => {
     const findBlog = blogs.find(b => b.id === blog.id)
-    const updatedBlog = {...findBlog, likes: findBlog.likes + 1, user: findBlog.user}
+    const updatedBlog = { ...findBlog, likes: findBlog.likes + 1, user: findBlog.user }
 
     blogService
       .update(updatedBlog.id, updatedBlog)
       .then(returnedBlog => {
         setBlogs(blogs.map(b => b.id !== updatedBlog.id ? b : returnedBlog))
       })
-      .catch(error => {
+      .catch(() => {
         handleMessage('An error occured while trying to like a blog', 'error')
       })
   }
@@ -85,14 +85,13 @@ const App = () => {
     if (window.confirm(`Delete blog called ${blog.title} ?`)) {
       blogService
         .remove(id)
-        .then(res => {
+        .then(() => {
           setBlogs(blogs.filter(b => b.id !== id))
           handleMessage(`Deleted a blog called ${blog.title}`)
         })
-        .catch(error => {
+        .catch(() => {
           handleMessage('An error occured while trying to delete blog', 'error')
         })
-      
     }
   }
 
@@ -105,7 +104,7 @@ const App = () => {
 
       window.localStorage.setItem(
         'loggedNoteappUser', JSON.stringify(user)
-      ) 
+      )
 
       blogService.setToken(user.token)
       setUser(user)
@@ -132,21 +131,21 @@ const App = () => {
 
       {user === null
         ? <Togglable buttonLabel='login'>
-            <LoginForm 
-              username={username}
-              setUsername={setUsername}
-              password={password}
-              setPassword={setPassword}
-              handleLogin={handleLogin}
-            />
+          <LoginForm
+            username={username}
+            setUsername={setUsername}
+            password={password}
+            setPassword={setPassword}
+            handleLogin={handleLogin}
+          />
+        </Togglable>
+        : <div>
+          <p>{user.name} logged in</p>
+          <button className="remove-button" type="button" onClick={handleLogOut}>Log out</button>
+          <Togglable buttonLabel='add a new blog' ref={blogFormRef}>
+            <BlogForm createBlog={addBlog} user={user} />
           </Togglable>
-        : <div> 
-            <p>{user.name} logged in</p>
-            <button className="remove-button" type="button" onClick={handleLogOut}>Log out</button>
-            <Togglable buttonLabel='add a new blog' ref={blogFormRef}>
-              <BlogForm createBlog={addBlog} user={user} />
-            </Togglable>
-          </div>
+        </div>
       }
 
       <h3>Blogs</h3>

@@ -29,7 +29,7 @@ const Blog = ({ blog, handleLikes, handleRemove }) => {
         </button>
       </h4>
       {buttonState
-        ? <div>
+        ? <div className='blogInfo'>
           <a href={blog.url}>{blog.url}</a>
           <p> {blog.likes} people have liked this blog</p>
           <p> {blog.user.username} </p>

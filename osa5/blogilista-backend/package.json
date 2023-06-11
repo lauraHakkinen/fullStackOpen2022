@@ -8,7 +8,8 @@
     "start": "cross-env NODE_ENV=production node index.js",
     "build:ui": "rmdir /s build && mkdir build && cd ../blogilista-frontend && npm run build && Xcopy /E C:\\Users\\laura\\Documents\\AALTO\\fullStack\\fullStackOpen2022\\osa4\\blogilista-frontend\\build C:\\Users\\laura\\Documents\\AALTO\\fullStack\\fullStackOpen2022\\osa4\\blogilista-backend\\build",
     "lint": "eslint .",
-    "test": "cross-env NODE_ENV=test jest --verbose --runInBand --forceExit"
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand --forceExit",
+    "start:test": "cross-env NODE_ENV=test node index.js"
   },
   "author": "Laura Häkkinen",
   "license": "ISC",

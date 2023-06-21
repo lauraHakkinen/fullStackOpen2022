@@ -34,6 +34,11 @@
       "content": "Adding a new anecdote",
       "votes": 0,
       "id": 7
+    },
+    {
+      "content": "Testing again",
+      "votes": 0,
+      "id": 8
     }
   ]
 }

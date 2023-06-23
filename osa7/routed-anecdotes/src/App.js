@@ -2,10 +2,11 @@ import { useState } from 'react'
 
 import {
   BrowserRouter as Router,
-  Routes, Route, Link
+  Routes, Route, Link,
+  useParams
 } from 'react-router-dom'
 
-const Menu = () => {
+const Menu = ({ anecdotes, setAnecdotes }) => {
   const padding = {
     paddingRight: 5
   }
@@ -18,7 +19,8 @@ const Menu = () => {
       </div>
 
       <Routes>
-        <Route path='/' element={<AnecdoteList />} />
+        <Route path='/' element={<AnecdoteList anecdotes={anecdotes} setAnecdotes={setAnecdotes}/>} />
+        <Route path='/anecdotes/:id' element={<Anecdote anecdotes={anecdotes}/>} />
         <Route path='/create' element={<CreateNew />} />
         <Route path='/about' element={<About />} />
       </Routes>
@@ -26,24 +28,7 @@ const Menu = () => {
   )
 }
 
-const AnecdoteList = () => {
-
-  const [anecdotes, setAnecdotes] = useState([
-    {
-      content: 'If it hurts, do it more often',
-      author: 'Jez Humble',
-      info: 'https://martinfowler.com/bliki/FrequencyReducesDifficulty.html',
-      votes: 0,
-      id: 1
-    },
-    {
-      content: 'Premature optimization is the root of all evil',
-      author: 'Donald Knuth',
-      info: 'http://wiki.c2.com/?PrematureOptimization',
-      votes: 0,
-      id: 2
-    }
-  ])
+const AnecdoteList = ({ anecdotes, setAnecdotes }) => {
 
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
@@ -68,8 +53,27 @@ const AnecdoteList = () => {
     <div>
       <h2>Anecdotes</h2>
       <ul>
-        {anecdotes.map(anecdote => <li key={anecdote.id} >{anecdote.content}</li>)}
+        {anecdotes.map(anecdote => 
+          <li key={anecdote.id} >
+            <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
+          </li>
+        )}
       </ul>
+    </div>
+  )
+}
+
+const Anecdote = ({ anecdotes }) => {
+  const id = useParams().id
+  const anecdote = anecdotes.find(a => a.id === Number(id))
+  return (
+    <div>
+      <h2>{anecdote.content} by {anecdote.author}</h2>
+      <p>has {anecdote.votes} votes</p>
+      <p>
+        for more info see &nbsp;
+        <a href={anecdote.info}>{anecdote.info}</a>
+      </p>
     </div>
   )
 }
@@ -137,12 +141,29 @@ const CreateNew = (props) => {
 
 const App = () => {
 
+  const [anecdotes, setAnecdotes] = useState([
+    {
+      content: 'If it hurts, do it more often',
+      author: 'Jez Humble',
+      info: 'https://martinfowler.com/bliki/FrequencyReducesDifficulty.html',
+      votes: 0,
+      id: 1
+    },
+    {
+      content: 'Premature optimization is the root of all evil',
+      author: 'Donald Knuth',
+      info: 'http://wiki.c2.com/?PrematureOptimization',
+      votes: 0,
+      id: 2
+    }
+  ])
+
   const [notification, setNotification] = useState('')
 
   return (
     <div>
       <h1>Software anecdotes</h1>
-      <Menu />
+      <Menu anecdotes={anecdotes} setAnecdotes={setAnecdotes}/>
       <Footer />
     </div>
   )

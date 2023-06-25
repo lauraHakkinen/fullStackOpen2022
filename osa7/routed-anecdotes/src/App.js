@@ -88,9 +88,9 @@ const CreateNew = ( props ) => {
   /*const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')*/
-  const content = useField('text')
-  const author = useField('text')
-  const info = useField('text')
+  const [content, resetContent] = useField('text')
+  const [author, resetAuthor] = useField('text')
+  const [info, resetInfo] = useField('text')
   const navigate = useNavigate()
 
   const handleSubmit = (e) => {
@@ -108,6 +108,13 @@ const CreateNew = ( props ) => {
     }, 5000)
   }
 
+  const handleReset = (e) => {
+    e.preventDefault()
+    resetContent()
+    resetAuthor()
+    resetInfo()
+  }
+
   return (
     <div>
       <h2>create a new anecdote</h2>
@@ -122,7 +129,8 @@ const CreateNew = ( props ) => {
         <input {...info} /> 
         <br/>
         <button>create</button>
-      </form>
+        <button onClick={handleReset}>reset</button>
+      </form> 
     </div>
   )
 

@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { useField } from './hooks'
+import { Table } from 'react-bootstrap'
+import { Alert } from '@mui/material'
 
 import {
   BrowserRouter as Router,
@@ -34,13 +36,19 @@ const AnecdoteList = ( props ) => {
   return (
     <div>
       <h2>Anecdotes</h2>
-      <ul>
-        {props.anecdotes.map(anecdote => 
-          <li key={anecdote.id} >
-            <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
-          </li>
-        )}
-      </ul>
+      <Table striped>
+        <tbody>
+          {props.anecdotes.map(anecdote => 
+            <tr key={anecdote.id} >
+              <td>
+                <Link to={`/anecdotes/${anecdote.id}`}>
+                  {anecdote.content}
+                </Link>
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </Table>
     </div>
   )
 }
@@ -177,9 +185,15 @@ const App = () => {
   }
 
   return (
-    <div>
+    <div className='container'>
       <h1>Software anecdotes</h1>
-      <p>{notification}</p>
+      <div>
+        {(notification &&
+          <Alert severity='success'>
+            {notification}
+          </Alert>
+        )}
+      </div>
       <Menu anecdotes={anecdotes} setAnecdotes={setAnecdotes} addNew={addNew} setNotification={setNotification}/>
       <Footer />
     </div>

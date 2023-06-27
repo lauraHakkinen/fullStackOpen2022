@@ -7,6 +7,7 @@ const Anecdotes = () => {
   const dispatch = useDispatch()
   
   const anecdotes = useSelector(state => {
+    console.log(state.anecdotes)
     return state.anecdotes.filter(a => a.content.toUpperCase().includes(state.filter.toUpperCase()))
   })
 

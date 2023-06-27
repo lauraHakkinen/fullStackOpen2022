@@ -7,26 +7,26 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import './index.css'
 import Togglable from './components/Togglable'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { showNotification } from './reducers/notificationReducer'
+import { createBlog, initializeBlogs } from './reducers/blogReducer'
 
 const App = () => {
 
-  const [blogs, setBlogs] = useState([])
-  //const [notification, setNotification] = useState({ message: null })
+  const dispatch = useDispatch()
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
-  const dispatch = useDispatch()
-
   useEffect(() => {
-    blogService
-      .getAll()
-      .then(initialBlogs => {
-        setBlogs(initialBlogs)
-      })
-  }, [])
+    dispatch(initializeBlogs())
+  }, [dispatch])
+
+
+  const blogs = useSelector(state => {
+    return state.blogs
+  })
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -37,7 +37,7 @@ const App = () => {
     }
   }, [])
 
-  const addBlog = (blogObject) => {
+  const addBlog = async (blogObject) => {
 
     if (!blogObject.author || !blogObject.title || !blogObject.url) {
       dispatch(showNotification('No author, title and/or url specified', 5))
@@ -50,20 +50,12 @@ const App = () => {
     }
 
     blogObject.user = username
-
     blogFormRef.current.toggleVisibility()
-    blogService
-      .create(blogObject)
-      .then(returnedBlog => {
-        setBlogs(blogs.concat(returnedBlog))
-        dispatch(showNotification(`Blog ${returnedBlog.title} was added to the list`, 5))
-      })
-      .catch(error => {
-        dispatch(showNotification(error.response.data.error, 5))
-      })
+    dispatch(createBlog(blogObject))
+    dispatch(showNotification(`Blog ${blogObject.title} was added to the list`, 5))
   }
 
-  const updateLikes = (blog) => {
+  /*const updateLikes = (blog) => {
     const findBlog = blogs.find(b => b.id === blog.id)
     const updatedBlog = { ...findBlog, likes: findBlog.likes + 1, user: findBlog.user }
 
@@ -75,9 +67,9 @@ const App = () => {
       .catch(() => {
         dispatch(showNotification('An error occured while trying to like a blog', 5))
       })
-  }
+  }*/
 
-  const handleRemove = (id) => {
+  /*const handleRemove = (id) => {
     const blog = blogs.find(b => b.id === id)
     console.log(blog.title)
 
@@ -92,7 +84,7 @@ const App = () => {
           dispatch(showNotification('An error occured while trying to delete blog', 5))
         })
     }
-  }
+  }*/
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -150,7 +142,7 @@ const App = () => {
       <br/>
       <h2>Blogs</h2>
 
-      <Blogs blogs={blogs} handleLikes={updateLikes} handleRemove={handleRemove} user={user} />
+      <Blogs user={user} />
     </div>
   )
 }

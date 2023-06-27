@@ -1,12 +1,18 @@
 import PropTypes from 'prop-types'
 import Blog from './Blog'
+import { useSelector } from 'react-redux'
 
-const Blogs = ({ blogs, handleLikes, handleRemove, user }) => {
+const Blogs = ({ user }) => {
 
-  blogs = blogs.sort((a,b) => b.likes - a.likes)
+  //const dispatch = useDispatch()
+
+  const importedBlogs = useSelector(state => {
+    return state.blogs
+  })
+
+  const blogs = [...importedBlogs]
 
   Blogs.propTypes = {
-    blogs: PropTypes.array.isRequired,
     user: PropTypes.shape({
       token: PropTypes.string,
       username: PropTypes.string,
@@ -16,13 +22,11 @@ const Blogs = ({ blogs, handleLikes, handleRemove, user }) => {
 
   return (
     <div>
-      {blogs.map(b =>
+      {blogs.sort((a,b) => b.likes - a.likes).map(b =>
         <div key={b.url}>
           <Blog
             key={b.url}
             blog={b}
-            handleLikes={handleLikes}
-            handleRemove={handleRemove}
             user={user}
           />
         </div>

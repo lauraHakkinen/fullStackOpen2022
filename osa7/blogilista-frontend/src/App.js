@@ -16,6 +16,7 @@ import {
 import { initializeBlogs } from './reducers/blogReducer'
 import { initializeUsers } from './reducers/usersReducer'
 import { logoutUser } from './reducers/loginReducer'
+import User from './components/User'
 
 const App = () => {
 
@@ -23,6 +24,10 @@ const App = () => {
 
   const user = useSelector(state => {
     return state.user
+  })
+
+  const users = useSelector(state => {
+    return state.users
   })
 
   useEffect(() => {
@@ -60,6 +65,7 @@ const App = () => {
         }
         <br/>
         <Routes>
+          <Route path="/users/:id" element={<User users={users} />} />
           <Route path='/users' element={<Users />} />
           <Route path='/' element={<Blogs />} />
         </Routes>

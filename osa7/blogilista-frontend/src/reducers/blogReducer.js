@@ -1,28 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit'
 import blogService from '../services/blogs'
 
-const initialState = [
-  'If it hurts, do it more often'
-]
-
-const getId = () => (100000 * Math.random()).toFixed(0)
-
-const asObject = (title) => {
-  return {
-    title: title,
-    author: 'Tester',
-    id: getId(),
-    likes: 0,
-    url: 'www.test',
-  }
-}
-
 const blogSlice = createSlice({
   name: 'blogs',
-  initialState: initialState.map(asObject),
+  initialState: [],
   reducers: {
+    like(state) {
+      return state
+    },
     setBlogs(state, action) {
-      console.log(action.payload)
       return action.payload
     },
     appendBlog(state, action) {
@@ -45,5 +31,24 @@ export const createBlog = content => {
   }
 }
 
-export const { setBlogs, appendBlog } = blogSlice.actions
+export const likeBlog = blog => {
+  return async dispatch => {
+    const updatedBlog = await blogService.update(blog)
+    dispatch(like(updatedBlog))
+    const blogs = await blogService.getAll()
+    dispatch(setBlogs(blogs))
+  }
+}
+
+export const removeBlog = blog => {
+  return async dispatch => {
+    if (window.confirm(`Remove blog called ${blog.title} ?`)) {
+      await blogService.remove(blog.id)
+      const blogs = await blogService.getAll()
+      dispatch(setBlogs(blogs))
+    }
+  }
+}
+
+export const { setBlogs, appendBlog, like } = blogSlice.actions
 export default blogSlice.reducer

@@ -4,8 +4,6 @@ import { useSelector } from 'react-redux'
 
 const Blogs = ({ user }) => {
 
-  //const dispatch = useDispatch()
-
   const importedBlogs = useSelector(state => {
     return state.blogs
   })

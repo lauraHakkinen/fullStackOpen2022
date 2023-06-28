@@ -24,6 +24,7 @@ export const loginUser = (username, password) => {
     const user = await loginService.login({
       username, password
     })
+    console.log(user)
     window.localStorage.setItem(
       'loggedBlogappUser', JSON.stringify(user)
     )

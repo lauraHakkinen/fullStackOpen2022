@@ -1,12 +1,20 @@
 import { useEffect } from 'react'
+import './index.css'
 import BlogForm from './components/BlogForm'
 import Blogs from './components/Blogs'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
-import './index.css'
 import Togglable from './components/Togglable'
+import Users from './components/Users'
 import { useDispatch, useSelector } from 'react-redux'
+
+import {
+  BrowserRouter as Router,
+  Routes, Route, Link
+} from 'react-router-dom'
+
 import { initializeBlogs } from './reducers/blogReducer'
+import { initializeUsers } from './reducers/usersReducer'
 import { logoutUser } from './reducers/loginReducer'
 
 const App = () => {
@@ -19,32 +27,44 @@ const App = () => {
 
   useEffect(() => {
     dispatch(initializeBlogs())
+    dispatch(initializeUsers())
   }, [dispatch])
 
   const handleLogOut = () => {
     dispatch(logoutUser())
   }
 
+  const padding = {
+    padding: 5
+  }
+
   return (
-    <div>
-      <h1>Bloglist</h1>
+    <Router>
+      <div>
+        <Link style={padding} to="/">blogs</Link>
+        <Link style={padding} to="/users">users</Link>
+        <br/>
+        <h1>Bloglist</h1>
 
-      <Notification />
+        <Notification />
 
-      {user === null
-        ? <Togglable buttonLabel='log in'>
-          <LoginForm />
-        </Togglable>
-        : <div>
-          <p>{user.name} logged in</p>
-          <button className="remove-button" type="button" onClick={handleLogOut}>Log out</button>
-          <BlogForm />
-        </div>
-      }
-      <br/>
-      <h2>Blogs</h2>
-      <Blogs />
-    </div>
+        {user === null
+          ? <Togglable buttonLabel='log in'>
+            <LoginForm />
+          </Togglable>
+          : <div>
+            <p>{user.name} logged in</p>
+            <button className="remove-button" type="button" onClick={handleLogOut}>Log out</button>
+            <BlogForm />
+          </div>
+        }
+        <br/>
+        <Routes>
+          <Route path='/users' element={<Users />} />
+          <Route path='/' element={<Blogs />} />
+        </Routes>
+      </div>
+    </Router>
   )
 }
 

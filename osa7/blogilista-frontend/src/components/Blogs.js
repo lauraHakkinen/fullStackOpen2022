@@ -8,10 +8,6 @@ const Blogs = () => {
     return state.blogs
   })
 
-  /*const user = useSelector(state => {
-    return state.user
-  })*/
-
   const blogs = [...importedBlogs]
 
   Blogs.propTypes = {
@@ -24,6 +20,7 @@ const Blogs = () => {
 
   return (
     <div>
+      <h2>Blogs</h2>
       {blogs.sort((a,b) => b.likes - a.likes).map(b =>
         <div key={b.url}>
           <Blog

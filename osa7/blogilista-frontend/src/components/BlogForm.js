@@ -4,12 +4,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import { createBlog } from '../reducers/blogReducer'
 import Togglable from './Togglable'
 
-const BlogForm = ({ user, username }) => {
+const BlogForm = () => {
 
   const dispatch = useDispatch()
 
   const blogs = useSelector(state => {
     return state.blogs
+  })
+
+  const user = useSelector(state => {
+    return state.user
   })
 
   const blogFormRef = useRef()
@@ -34,7 +38,7 @@ const BlogForm = ({ user, username }) => {
       return
     }
 
-    blogObject.user = username
+    blogObject.user = user.username
     blogFormRef.current.toggleVisibility()
     dispatch(createBlog(blogObject))
     dispatch(showNotification(`Blog ${blogObject.title} was added to the list`, 5))

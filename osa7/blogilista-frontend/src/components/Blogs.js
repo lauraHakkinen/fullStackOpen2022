@@ -2,11 +2,15 @@ import PropTypes from 'prop-types'
 import Blog from './Blog'
 import { useSelector } from 'react-redux'
 
-const Blogs = ({ user }) => {
+const Blogs = () => {
 
   const importedBlogs = useSelector(state => {
     return state.blogs
   })
+
+  /*const user = useSelector(state => {
+    return state.user
+  })*/
 
   const blogs = [...importedBlogs]
 
@@ -25,7 +29,6 @@ const Blogs = ({ user }) => {
           <Blog
             key={b.url}
             blog={b}
-            user={user}
           />
         </div>
       )}

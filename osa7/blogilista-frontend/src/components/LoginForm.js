@@ -1,13 +1,24 @@
-import PropTypes from 'prop-types'
+import { useState } from 'react'
+import { loginUser } from '../reducers/loginReducer'
+import { useDispatch } from 'react-redux'
+import { showNotification } from '../reducers/notificationReducer'
 
-const LoginForm = ({ username, setUsername, password, setPassword, handleLogin }) => {
+const LoginForm = () => {
 
-  LoginForm.propTypes = {
-    handleLogin: PropTypes.func.isRequired,
-    username: PropTypes.string.isRequired,
-    password: PropTypes.string.isRequired,
-    setUsername: PropTypes.func.isRequired,
-    setPassword: PropTypes.func.isRequired
+  const dispatch = useDispatch()
+
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+
+  const handleLogin = async (event) => {
+    event.preventDefault()
+    try {
+      dispatch(loginUser(username, password))
+      setUsername('')
+      setPassword('')
+    } catch (exception) {
+      dispatch(showNotification('Wrong credentials', 5))
+    }
   }
 
   return (

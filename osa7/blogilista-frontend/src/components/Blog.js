@@ -1,17 +1,14 @@
-import { useState } from 'react'
 import { likeBlog, removeBlog } from '../reducers/blogReducer'
 import { useDispatch } from 'react-redux'
 import { showNotification } from '../reducers/notificationReducer'
+import { useParams } from 'react-router-dom'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blogs }) => {
 
   const dispatch = useDispatch()
 
-  const [buttonState, setButtonState] = useState(false)
-
-  const handleClick = (previousState) => {
-    setButtonState(!previousState)
-  }
+  const id = useParams().id
+  const blog = blogs.find(b => b.id === id)
 
   const handleLike = (blog) => {
     dispatch(likeBlog(blog))
@@ -25,21 +22,14 @@ const Blog = ({ blog }) => {
 
   return (
     <div id='blog' className='blog'>
-      <h4 className='blogTitleAuthor'>
-        {blog.title} by {blog.author}
-        <button className='remove-button' type='button' onClick={() => handleClick(buttonState)}>
-          {buttonState ? 'hide' : 'view'}
-        </button>
-      </h4>
-      {buttonState
-        ? <div className='blogInfo'>
-          <a href={blog.url}>{blog.url}</a>
-          <p> {blog.likes} people have liked this blog</p>
-          <p> {blog.user.username} </p>
-          <button id='like-button' className='like-button' type="button" onClick={() => handleLike(blog)}>like</button>
-          <button id='remove-button' className='remove-button' type="button" onClick={() => handleRemove(blog)}>remove</button>
-        </div>
-        : <div className='blogNoInfo'></div> }
+      <h3> {blog.title} by {blog.author} </h3>
+      <div className='blogInfo'>
+        <a href={blog.url}>{blog.url}</a>
+        <p> {blog.likes} people have liked this blog</p>
+        <p> added by {blog.user.name} </p>
+        <button id='like-button' className='like-button' type="button" onClick={() => handleLike(blog)}>like</button>
+        <button id='remove-button' className='remove-button' type="button" onClick={() => handleRemove(blog)}>remove</button>
+      </div>
     </div>
   )
 

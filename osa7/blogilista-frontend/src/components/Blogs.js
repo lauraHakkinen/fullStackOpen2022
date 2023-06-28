@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
-import Blog from './Blog'
 import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 const Blogs = () => {
 
@@ -10,27 +10,33 @@ const Blogs = () => {
 
   const blogs = [...importedBlogs]
 
-  Blogs.propTypes = {
-    user: PropTypes.shape({
-      token: PropTypes.string,
-      username: PropTypes.string,
-      name: PropTypes.string,
-    })
-  }
+  console.log(blogs)
 
   return (
     <div>
       <h2>Blogs</h2>
-      {blogs.sort((a,b) => b.likes - a.likes).map(b =>
-        <div key={b.url}>
-          <Blog
-            key={b.url}
-            blog={b}
-          />
-        </div>
-      )}
+      <table>
+        <tbody>
+          {blogs.sort((a,b) => b.likes - a.likes).map(blog => (
+            <tr key={blog.id}>
+              <td>
+                <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+              </td>
+            </tr>
+          ))
+          }
+        </tbody>
+      </table>
     </div>
   )
+}
+
+Blogs.propTypes = {
+  user: PropTypes.shape({
+    token: PropTypes.string,
+    username: PropTypes.string,
+    name: PropTypes.string,
+  })
 }
 
 export default Blogs

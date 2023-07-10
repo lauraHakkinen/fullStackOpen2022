@@ -11,8 +11,8 @@ const blog = {
   likes: 0,
   user: {
     name: 'Tester Test',
-    username: 'tester'
-  }
+    username: 'tester',
+  },
 }
 
 describe('<Blog />', () => {
@@ -21,7 +21,13 @@ describe('<Blog />', () => {
 
   beforeEach(() => {
     container = render(
-      <Blog key={blog.url} blog={blog} handleLikes={mockHandlerLike} handleRemove={mockHandlerLike} user={blog.user} />
+      <Blog
+        key={blog.url}
+        blog={blog}
+        handleLikes={mockHandlerLike}
+        handleRemove={mockHandlerLike}
+        user={blog.user}
+      />
     ).container
   })
 
@@ -79,5 +85,4 @@ describe('<Blog />', () => {
 
     expect(mockHandlerLike.mock.calls).toHaveLength(2)
   })
-
 })

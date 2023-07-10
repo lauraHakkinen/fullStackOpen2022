@@ -4,13 +4,12 @@ import { useDispatch } from 'react-redux'
 import { showNotification } from '../reducers/notificationReducer'
 
 const LoginForm = () => {
-
   const dispatch = useDispatch()
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const handleLogin = async (event) => {
+  const handleLogin = async event => {
     event.preventDefault()
     try {
       dispatch(loginUser(username, password))
@@ -45,7 +44,9 @@ const LoginForm = () => {
             onChange={({ target }) => setPassword(target.value)}
           />
         </div>
-        <button id="login-button" className="logout-button" type="submit">login</button>
+        <button id="login-button" className="logout-button" type="submit">
+          login
+        </button>
       </form>
     </div>
   )

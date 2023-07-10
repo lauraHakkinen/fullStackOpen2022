@@ -5,7 +5,6 @@ import { createBlog } from '../reducers/blogReducer'
 import Togglable from './Togglable'
 
 const BlogForm = () => {
-
   const dispatch = useDispatch()
 
   const blogs = useSelector(state => {
@@ -22,29 +21,45 @@ const BlogForm = () => {
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
 
-  const handleAuthor = (event) => setAuthor(event.target.value)
-  const handleTitle = (event) => setTitle(event.target.value)
-  const handleUrl = (event) => setUrl(event.target.value)
+  const handleAuthor = event => setAuthor(event.target.value)
+  const handleTitle = event => setTitle(event.target.value)
+  const handleUrl = event => setUrl(event.target.value)
 
-  const createBlogObject = async (blogObject) => {
-
+  const createBlogObject = async blogObject => {
     if (!blogObject.author || !blogObject.title || !blogObject.url) {
       dispatch(showNotification('No author, title and/or url specified', 5))
       return
     }
 
-    if (blogs.find(b => (b.author === blogObject.author && b.title === blogObject.title && b.url === blogObject.url))) {
-      dispatch(showNotification('This blog has already been added to the list', 5))
+    if (
+      blogs.find(
+        b =>
+          b.author === blogObject.author &&
+          b.title === blogObject.title &&
+          b.url === blogObject.url
+      )
+    ) {
+      dispatch(
+        showNotification('This blog has already been added to the list', 5)
+      )
       return
     }
 
     blogObject.user = user.username
     blogFormRef.current.toggleVisibility()
-    dispatch(createBlog(blogObject))
-    dispatch(showNotification(`Blog ${blogObject.title} was added to the list`, 5))
+    try {
+      dispatch(createBlog(blogObject))
+      dispatch(
+        showNotification(`Blog ${blogObject.title} was added to the list`, 5)
+      )
+    } catch (error) {
+      dispatch(
+        showNotification('An error happened while trying to add blog.', 5)
+      )
+    }
   }
 
-  const addBlog = (event) => {
+  const addBlog = event => {
     event.preventDefault()
 
     createBlogObject({
@@ -52,7 +67,7 @@ const BlogForm = () => {
       title: title,
       url: url,
       likes: 0,
-      user: user.username
+      user: user.username,
     })
 
     setAuthor('')
@@ -61,35 +76,42 @@ const BlogForm = () => {
   }
 
   return (
-    <Togglable buttonLabel='add a new blog' ref={blogFormRef}>
+    <Togglable buttonLabel="add a new blog" ref={blogFormRef}>
       <div>
         <h3>Add a new blog</h3>
-        <form className='form' onSubmit={addBlog}>
+        <form className="form" onSubmit={addBlog}>
           <div>
-            Author: <input
+            Author:{' '}
+            <input
               id="author"
               value={author}
               onChange={handleAuthor}
-              placeholder='add author'
+              placeholder="add author"
             />
           </div>
           <div>
-            Title: <input
+            Title:{' '}
+            <input
               id="title"
               value={title}
               onChange={handleTitle}
-              placeholder='add title'
+              placeholder="add title"
             />
           </div>
           <div>
-            Url: <input
+            Url:{' '}
+            <input
               id="url"
               value={url}
               onChange={handleUrl}
-              placeholder='add url'
+              placeholder="add url"
             />
           </div>
-          <div><button id="submit-button" className='submit-button' type="Submit">submit</button></div>
+          <div>
+            <button id="submit-button" className="submit-button" type="Submit">
+              submit
+            </button>
+          </div>
         </form>
       </div>
     </Togglable>

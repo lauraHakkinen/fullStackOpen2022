@@ -1,7 +1,7 @@
 /* eslint-disable semi */
 /* eslint-disable no-undef */
 // eslint-disable-next-line quotes
-const { defineConfig } = require("cypress");
+const { defineConfig } = require('cypress')
 
 module.exports = defineConfig({
   e2e: {
@@ -11,4 +11,4 @@ module.exports = defineConfig({
     },
     //baseUrl: 'http://localhost:3000'
   },
-});
+})

@@ -8,19 +8,16 @@ import Togglable from './components/Togglable'
 import Users from './components/Users'
 import { useDispatch, useSelector } from 'react-redux'
 
-import {
-  BrowserRouter as Router,
-  Routes, Route, Link
-} from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 
 import { initializeBlogs } from './reducers/blogReducer'
 import { initializeUsers } from './reducers/usersReducer'
 import { logoutUser } from './reducers/loginReducer'
 import User from './components/User'
 import Blog from './components/Blog'
+import Comments from './components/Comments'
 
 const App = () => {
-
   const dispatch = useDispatch()
 
   const user = useSelector(state => {
@@ -45,35 +42,52 @@ const App = () => {
   }
 
   const padding = {
-    padding: 5
+    padding: 5,
   }
 
   return (
     <Router>
       <div>
-        <Link style={padding} to="/">blogs</Link>
-        <Link style={padding} to="/users">users</Link>
-        <br/>
+        <Link style={padding} to="/">
+          blogs
+        </Link>
+        <Link style={padding} to="/users">
+          users
+        </Link>
+        {user === null ? (
+          <></>
+        ) : (
+          <p style={{ display: 'inline' }}>{user.name} logged in</p>
+        )}
+        <br />
         <h1>Bloglist</h1>
 
         <Notification />
 
-        {user === null
-          ? <Togglable buttonLabel='log in'>
+        {user === null ? (
+          <Togglable buttonLabel="log in">
             <LoginForm />
           </Togglable>
-          : <div>
+        ) : (
+          <div>
             <p>{user.name} logged in</p>
-            <button className="remove-button" type="button" onClick={handleLogOut}>Log out</button>
+            <button
+              className="remove-button"
+              type="button"
+              onClick={handleLogOut}
+            >
+              Log out
+            </button>
             <BlogForm />
           </div>
-        }
-        <br/>
+        )}
+        <br />
         <Routes>
           <Route path="/users/:id" element={<User users={users} />} />
-          <Route path='/users' element={<Users />} />
+          <Route path="/users" element={<Users />} />
           <Route path="/blogs/:id" element={<Blog blogs={blogs} />} />
-          <Route path='/' element={<Blogs />} />
+          <Route path="/" element={<Blogs />} />
+          <Route path="/blogs/:id/comments" element={<Comments />} />
         </Routes>
       </div>
     </Router>

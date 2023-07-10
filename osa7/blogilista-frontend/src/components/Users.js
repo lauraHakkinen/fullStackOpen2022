@@ -8,13 +8,10 @@ const Users = () => {
     return state.users
   })
 
-  console.log('in Users')
-  console.log(users)
-
   return (
     <div>
       <h2>Users</h2>
-      <UserList users={users}/>
+      <UserList users={users} />
     </div>
   )
 }

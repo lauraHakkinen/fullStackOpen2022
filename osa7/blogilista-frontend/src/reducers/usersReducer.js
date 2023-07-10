@@ -10,7 +10,7 @@ const usersSlice = createSlice({
     setUsers(state, action) {
       return action.payload
     },
-  }
+  },
 })
 
 export const initializeUsers = () => {

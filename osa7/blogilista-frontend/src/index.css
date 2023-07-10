@@ -42,20 +42,27 @@ p {
   align-items: center;
   background-color: #c8f3c3ec;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: .25rem;
+  border-radius: 0.25rem;
   box-shadow: rgba(13, 100, 8, 0.02) 0 1px 3px 0;
   box-sizing: border-box;
   color: rgba(11, 129, 11, 0.947);
   cursor: pointer;
   display: inline-flex;
-  font-family: system-ui,-apple-system,system-ui,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    system-ui,
+    'Helvetica Neue',
+    Helvetica,
+    Arial,
+    sans-serif;
   font-size: 16px;
   font-weight: 600;
   justify-content: center;
   line-height: 1.25;
   margin: 0;
   min-height: 3rem;
-  padding: calc(.875rem - 1px) calc(1.5rem - 1px);
+  padding: calc(0.875rem - 1px) calc(1.5rem - 1px);
   position: relative;
   text-decoration: none;
   transition: all 250ms;
@@ -68,7 +75,7 @@ p {
 
 .like-button {
   background-color: #2ea44f;
-  border: 1px solid rgba(27, 31, 35, .15);
+  border: 1px solid rgba(27, 31, 35, 0.15);
   border-radius: 6px;
   box-sizing: border-box;
   color: #fff;
@@ -114,7 +121,7 @@ p {
 
 .logout-button {
   background-color: #2ea44f;
-  border: 1px solid rgba(27, 31, 35, .15);
+  border: 1px solid rgba(27, 31, 35, 0.15);
   border-radius: 6px;
   box-sizing: border-box;
   color: #fff;

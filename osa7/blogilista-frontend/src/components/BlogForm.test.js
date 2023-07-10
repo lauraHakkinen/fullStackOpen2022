@@ -5,13 +5,13 @@ import userEvent from '@testing-library/user-event'
 import BlogForm from './BlogForm'
 
 describe('<BlogForm />', () => {
-
   test('Form calls return function with the right information when blog is being created', async () => {
-
     const newBlogMock = jest.fn()
     render(<BlogForm createBlog={newBlogMock} user={'testuser'} />)
 
-    expect(screen.getByText('Add a new blog')).toHaveTextContent('Add a new blog')
+    expect(screen.getByText('Add a new blog')).toHaveTextContent(
+      'Add a new blog'
+    )
 
     const inputAuthor = screen.getByPlaceholderText('add author')
     const inputTitle = screen.getByPlaceholderText('add title')
@@ -29,5 +29,4 @@ describe('<BlogForm />', () => {
     expect(newBlogMock.mock.calls[0][0].author).toBe('Test Author')
     expect(newBlogMock.mock.calls[0][0].url).toBe('https://www.com')
   })
-
 })

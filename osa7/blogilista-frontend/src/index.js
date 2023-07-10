@@ -12,6 +12,4 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   </Provider>
 )
 
-blogService.getAll().then(blogs =>
-  store.dispatch(setBlogs(blogs))
-)
+blogService.getAll().then(blogs => store.dispatch(setBlogs(blogs)))

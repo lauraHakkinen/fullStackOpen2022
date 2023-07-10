@@ -4,7 +4,9 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
 
-const initialState = loggedUserJSON ? loggedUserJSON : null
+const initialState = loggedUserJSON ? JSON.parse(loggedUserJSON) : null
+
+loggedUserJSON ? blogService.setToken(initialState.token) : null
 
 const loginSlice = createSlice({
   name: 'user',
@@ -15,19 +17,18 @@ const loginSlice = createSlice({
     },
     clearUser() {
       return null
-    }
-  }
+    },
+  },
 })
 
 export const loginUser = (username, password) => {
   return async dispatch => {
     const user = await loginService.login({
-      username, password
+      username,
+      password,
     })
     console.log(user)
-    window.localStorage.setItem(
-      'loggedBlogappUser', JSON.stringify(user)
-    )
+    window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
     blogService.setToken(user.token)
     dispatch(setUser(user))
   }

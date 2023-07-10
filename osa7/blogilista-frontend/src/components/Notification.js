@@ -11,13 +11,9 @@ const Notification = () => {
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,
-    display: (notification === '') ? 'none' : ''
+    display: notification === '' ? 'none' : '',
   }
-  return (
-    <div style={style}>
-      {notification}
-    </div>
-  )
+  return <div style={style}>{notification}</div>
 }
 
 export default Notification

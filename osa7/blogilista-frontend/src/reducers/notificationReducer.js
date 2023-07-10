@@ -6,8 +6,8 @@ const notificationSlice = createSlice({
   reducers: {
     setNotification(state, action) {
       return action.payload
-    }
-  }
+    },
+  },
 })
 
 export const showNotification = (notification, displayTime) => {

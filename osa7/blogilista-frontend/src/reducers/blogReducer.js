@@ -14,10 +14,10 @@ const blogSlice = createSlice({
     appendBlog(state, action) {
       state.push(action.payload)
     },
-  }
+  },
 })
 
-export const initializeBlogs = ()  => {
+export const initializeBlogs = () => {
   return async dispatch => {
     const blogs = await blogService.getAll()
     dispatch(setBlogs(blogs))
